@@ -17,9 +17,11 @@ import type { Auth } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import reducers from './src/reducers';
+import { LoginForm } from './src/components/LoginForm';
 
 export default function App() {
   const [auth, setAuth] = useState<Auth | null>(null);
+
 
   useEffect(() => {
     const app = initializeApp({
@@ -47,13 +49,12 @@ export default function App() {
 
   }, []);
 
-
   return (
     <StoreProvider store={createStore(reducers)}>
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
           <StatusBar style="auto"/>
-          <Text>Open up App.tsx to start working on your app!</Text>
+          <LoginForm/>
         </SafeAreaView>
       </SafeAreaProvider>
     </StoreProvider>
