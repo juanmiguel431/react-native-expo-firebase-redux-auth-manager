@@ -3,7 +3,7 @@ enum Type {
   PasswordChange = 'PasswordChange',
   SetLoading = 'SetLoading',
   SetError = 'SetError',
-  LoginUser = 'LoginUser',
+  LoginUserSuccess = 'LoginUserSuccess',
 }
 
 export default Type;

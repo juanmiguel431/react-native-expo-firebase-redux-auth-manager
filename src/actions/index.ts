@@ -23,7 +23,7 @@ export const loginUser = ({ email, password }: User) => async (dispatch: Dispatc
 
     const credentials = await signInWithEmailAndPassword(getAuth(), email, password);
 
-    dispatch({ type: Type.LoginUser, payload: credentials.user });
+    dispatch({ type: Type.LoginUserSuccess, payload: credentials.user });
 
   } catch (e) {
     if (e instanceof Error) {

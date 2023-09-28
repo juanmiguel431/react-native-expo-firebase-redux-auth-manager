@@ -39,14 +39,13 @@ type SetErrorAction = {
 }
 
 type LoginUserAction = {
-  type: Type.LoginUser,
+  type: Type.LoginUserSuccess,
   payload: User;
 }
 
 type LoginFormReducerAction = EmailChangeAction | PasswordChangeAction | SetLoadingAction | SetErrorAction | LoginUserAction;
 
 export const authReducer = (state: LoginFormReducerState = initialState, action: LoginFormReducerAction): LoginFormReducerState => {
-  console.log('JMPC', action);
   switch (action.type) {
     case Type.EmailChange:
       return { ...state, email: action.payload };
@@ -56,7 +55,7 @@ export const authReducer = (state: LoginFormReducerState = initialState, action:
       return { ...state, isLoading: action.payload };
     case Type.SetError:
       return { ...state, errorMessage: action.payload };
-    case Type.LoginUser:
+    case Type.LoginUserSuccess:
       return { ...state, user: action.payload, errorMessage: '' };
     default:
       return state;
