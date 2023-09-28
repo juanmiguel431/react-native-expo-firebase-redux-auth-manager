@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text } from 'react-native';
-import { legacy_createStore as createStore } from 'redux';
+import { legacy_createStore as createStore, applyMiddleware } from 'redux';
 import { Provider as StoreProvider } from 'react-redux';
+import ReduxThunk from 'redux-thunk';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { initializeApp } from 'firebase/app';
 import {
@@ -14,13 +15,14 @@ import {
   AuthError, User
 } from 'firebase/auth';
 import type { Auth } from 'firebase/auth';
+// import firebase from 'firebase/compat';
 import { useEffect, useState } from 'react';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import reducers from './src/reducers';
 import { LoginForm } from './src/components/LoginForm';
 
 export default function App() {
-  const [auth, setAuth] = useState<Auth | null>(null);
+  // const [auth, setAuth] = useState<Auth | null>(null);
 
 
   useEffect(() => {
@@ -34,23 +36,26 @@ export default function App() {
       measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID
     });
 
-    //https://stackoverflow.com/questions/76914913/cannot-import-getreactnativepersistence-in-firebase10-1-0
+    // https://stackoverflow.com/questions/76914913/cannot-import-getreactnativepersistence-in-firebase10-1-0
     const auth = initializeAuth(app, {
       persistence: getReactNativePersistence(ReactNativeAsyncStorage)
     });
 
-    auth.onAuthStateChanged((user) => {
+    // auth.onAuthStateChanged((user) => {
       // const isLoggedIn = !!user;
       // setUser(user);
       // setLoggedIn(isLoggedIn);
-    });
+    // });
 
-    setAuth(auth);
+    // setAuth(auth);
 
   }, []);
 
+
+  const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
+
   return (
-    <StoreProvider store={createStore(reducers)}>
+    <StoreProvider store={store}>
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
           <StatusBar style="auto"/>
