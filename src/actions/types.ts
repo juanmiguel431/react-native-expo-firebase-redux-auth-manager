@@ -1,6 +1,6 @@
-enum ActionType {
+enum Type {
   EmailChange= 'EmailChanged',
   PasswordChange= 'PasswordChange',
 }
 
-export default ActionType;
+export default Type;

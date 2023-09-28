@@ -1,4 +1,4 @@
-import ActionType from '../actions/ActionType';
+import Type from '../actions/types';
 
 type LoginFormReducerState = {
   email: string;
@@ -11,12 +11,12 @@ const initialState: LoginFormReducerState = {
 };
 
 type EmailChangeAction = {
-  type: ActionType.EmailChange,
+  type: Type.EmailChange,
   payload: string;
 }
 
 type PasswordChangeAction = {
-  type: ActionType.PasswordChange,
+  type: Type.PasswordChange,
   payload: string;
 }
 
@@ -24,9 +24,9 @@ type LoginFormReducerAction = EmailChangeAction | PasswordChangeAction;
 
 export const authReducer = (state: LoginFormReducerState = initialState, action: LoginFormReducerAction): LoginFormReducerState => {
   switch (action.type) {
-    case ActionType.EmailChange:
+    case Type.EmailChange:
       return { ...state, email: action.payload };
-    case ActionType.PasswordChange:
+    case Type.PasswordChange:
       return { ...state, password: action.payload };
     default:
       return state;

@@ -1,15 +1,15 @@
-import ActionType from './ActionType';
+import Type from './types';
 
 export const emailChange = (email: string) => {
   return {
-    type: ActionType.EmailChange,
+    type: Type.EmailChange,
     payload: email
   }
 };
 
 export const passwordChange = (password: string) => {
   return {
-    type: ActionType.PasswordChange,
+    type: Type.PasswordChange,
     payload: password
   }
 };
