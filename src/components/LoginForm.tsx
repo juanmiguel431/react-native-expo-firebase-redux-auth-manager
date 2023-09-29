@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, LayoutAnimation, StyleSheet, Text, View } from 'react-native';
 import { Button, Input } from '@rneui/themed';
 import { connect, MapStateToProps } from 'react-redux';
 import { RootState } from '../reducers';
@@ -15,6 +15,7 @@ type StateProps = {
   email: string;
   password: string;
   error: string;
+  isLoading: boolean;
 };
 
 type DispatchProps = {
@@ -24,15 +25,8 @@ type DispatchProps = {
 
 type Props = LoginFormProps & StateProps & DispatchProps;
 
-const _LoginForm: React.FC<Props> = ({
-                                       emailChange,
-                                       passwordChange,
-                                       onSubmit,
-                                       submitLabel,
-                                       email,
-                                       password,
-                                       error
-                                     }) => {
+const _LoginForm: React.FC<Props> = (
+  { emailChange, passwordChange, onSubmit, submitLabel, email, password, error, isLoading }) => {
 
   return (
     <View>
@@ -60,10 +54,13 @@ const _LoginForm: React.FC<Props> = ({
       }
       <Button
         title={submitLabel}
+        loading={isLoading}
         onPress={() => {
+          LayoutAnimation.spring();
           onSubmit({ email, password });
         }}
       />
+      {/*{isLoading && <ActivityIndicator size="large"/>}*/}
     </View>
   );
 };
@@ -78,8 +75,8 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps: MapStateToProps<StateProps, LoginFormProps, RootState> = (
-  { auth: { email, password, error } }, ownProps) => {
-  return { email, password, error };
+  { auth: { email, password, error, isLoading } }, ownProps): StateProps => {
+  return { email, password, error, isLoading };
 }
 
 export const LoginForm = connect<StateProps, DispatchProps, LoginFormProps, RootState>(mapStateToProps, {

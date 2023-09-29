@@ -1,10 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text } from 'react-native';
+import { NativeModules, Platform, StyleSheet, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { legacy_createStore as createStore, applyMiddleware } from 'redux';
 import { Provider as StoreProvider } from 'react-redux';
-import ReduxThunk from 'redux-thunk';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { initializeApp } from 'firebase/app';
 import {
@@ -28,6 +26,12 @@ import store from './src/reducers';
 import { navigationRef } from './src/RootNavigation';
 import SignupScreen from './src/screens/SignupScreen';
 
+const { UIManager } = NativeModules;
+
+if (Platform.OS === 'android') {
+  UIManager.setLayoutAnimationEnabledExperimental &&
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const Stack = createStackNavigator<RootStackParamList>();
 
