@@ -2,8 +2,10 @@ enum Type {
   EmailChange = 'EmailChanged',
   PasswordChange = 'PasswordChange',
   SetLoading = 'SetLoading',
-  SetError = 'SetError',
+  LoginUserFail = 'LoginUserFail',
   LoginUserSuccess = 'LoginUserSuccess',
+  NavigateToSignup = 'NavigateToSignup',
+  NavigateToSignin = 'NavigateToSignin',
 }
 
 export default Type;

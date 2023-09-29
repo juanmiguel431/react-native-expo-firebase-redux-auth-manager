@@ -1,12 +1,15 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Button, Input, Text } from '@rneui/themed';
+import { Button, Input } from '@rneui/themed';
 import { connect, MapStateToProps } from 'react-redux';
 import { RootState } from '../reducers';
-import { emailChange, passwordChange, loginUser } from '../actions';
+import { emailChange, passwordChange } from '../actions';
 import { User } from '../models/user';
 
-type LoginFormProps = {};
+type LoginFormProps = {
+  onSubmit: (user: User) => void;
+  submitLabel: string;
+};
 
 type StateProps = {
   email: string;
@@ -16,16 +19,14 @@ type StateProps = {
 type DispatchProps = {
   emailChange: typeof emailChange;
   passwordChange: typeof passwordChange;
-  loginUser: (user: User) => void;
 };
 
 type Props = LoginFormProps & StateProps & DispatchProps;
 
-const _LoginForm: React.FC<Props> = ({ emailChange, passwordChange, loginUser, email, password  }) => {
+const _LoginForm: React.FC<Props> = ({ emailChange, passwordChange, onSubmit, submitLabel, email, password  }) => {
 
   return (
     <View>
-      <Text h1>Login Form</Text>
       <Input
         label="Email"
         placeholder="email@domain.com"
@@ -44,9 +45,9 @@ const _LoginForm: React.FC<Props> = ({ emailChange, passwordChange, loginUser, e
         onChangeText={passwordChange}
       />
       <Button
-        title="Login"
+        title={submitLabel}
         onPress={() => {
-          loginUser({ email, password });
+          onSubmit({ email, password });
         }}
       />
     </View>
@@ -58,5 +59,5 @@ const mapStateToProps: MapStateToProps<StateProps, LoginFormProps, RootState> = 
 }
 
 export const LoginForm = connect<StateProps, DispatchProps, LoginFormProps, RootState>(mapStateToProps, {
-  emailChange, passwordChange, loginUser
+  emailChange, passwordChange
 })(_LoginForm);

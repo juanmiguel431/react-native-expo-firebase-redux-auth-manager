@@ -1,5 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
 import { legacy_createStore as createStore, applyMiddleware } from 'redux';
 import { Provider as StoreProvider } from 'react-redux';
 import ReduxThunk from 'redux-thunk';
@@ -20,10 +22,17 @@ import { useEffect, useState } from 'react';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import reducers from './src/reducers';
 import { LoginForm } from './src/components/LoginForm';
+import { RootStackParamList, SCREEN } from './src/models/screen';
+import LoginScreen from './src/screens/LoginScreen';
+import store from './src/reducers';
+import { navigationRef } from './src/RootNavigation';
+import SignupScreen from './src/screens/SignupScreen';
+
+
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
   // const [auth, setAuth] = useState<Auth | null>(null);
-
 
   useEffect(() => {
     const app = initializeApp({
@@ -42,32 +51,28 @@ export default function App() {
     });
 
     // auth.onAuthStateChanged((user) => {
-      // const isLoggedIn = !!user;
-      // setUser(user);
-      // setLoggedIn(isLoggedIn);
+    // const isLoggedIn = !!user;
+    // setUser(user);
+    // setLoggedIn(isLoggedIn);
     // });
 
     // setAuth(auth);
 
   }, []);
 
-
-  const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
-
   return (
     <StoreProvider store={store}>
       <SafeAreaProvider>
-        <SafeAreaView style={styles.container}>
-          <StatusBar style="auto"/>
-          <LoginForm/>
-        </SafeAreaView>
+        <StatusBar style="auto"/>
+        <NavigationContainer ref={navigationRef}>
+          <Stack.Navigator initialRouteName={SCREEN.Signin}>
+            <Stack.Screen name={SCREEN.Signin} component={LoginScreen} options={{ title: 'Login' }}/>
+            <Stack.Screen name={SCREEN.Signup} component={SignupScreen} options={{ title: 'Signup' }}/>
+          </Stack.Navigator>
+        </NavigationContainer>
       </SafeAreaProvider>
     </StoreProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+const styles = StyleSheet.create({});
