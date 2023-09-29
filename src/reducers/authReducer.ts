@@ -62,9 +62,9 @@ export const authReducer = (state: LoginFormReducerState = initialState, action:
     case Type.SetLoading:
       return { ...state, isLoading: action.payload };
     case Type.LoginUserFail:
-      return { ...state, error: action.payload };
+      return { ...state, password: '', error: action.payload };
     case Type.LoginUserSuccess:
-      return { ...state, user: action.payload, error: '' };
+      return { ...state, user: action.payload, error: '', email: '', password: '' };
     case Type.NavigateToSignup:
     case Type.NavigateToSignin:
       return { ...state, error: '', email: '', password: '' };
