@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Button, Input } from '@rneui/themed';
 import { connect, MapStateToProps } from 'react-redux';
 import { RootState } from '../reducers';
@@ -14,6 +14,7 @@ type LoginFormProps = {
 type StateProps = {
   email: string;
   password: string;
+  error: string;
 };
 
 type DispatchProps = {
@@ -23,7 +24,15 @@ type DispatchProps = {
 
 type Props = LoginFormProps & StateProps & DispatchProps;
 
-const _LoginForm: React.FC<Props> = ({ emailChange, passwordChange, onSubmit, submitLabel, email, password  }) => {
+const _LoginForm: React.FC<Props> = ({
+                                       emailChange,
+                                       passwordChange,
+                                       onSubmit,
+                                       submitLabel,
+                                       email,
+                                       password,
+                                       error
+                                     }) => {
 
   return (
     <View>
@@ -44,6 +53,11 @@ const _LoginForm: React.FC<Props> = ({ emailChange, passwordChange, onSubmit, su
         value={password}
         onChangeText={passwordChange}
       />
+      {error &&
+        <View>
+          <Text style={styles.error}>{error}</Text>
+        </View>
+      }
       <Button
         title={submitLabel}
         onPress={() => {
@@ -54,8 +68,18 @@ const _LoginForm: React.FC<Props> = ({ emailChange, passwordChange, onSubmit, su
   );
 };
 
-const mapStateToProps: MapStateToProps<StateProps, LoginFormProps, RootState> = ({ auth: { email, password} }, ownProps) => {
-  return { email, password };
+const styles = StyleSheet.create({
+  error: {
+    alignSelf: 'center',
+    color: 'red',
+    fontSize: 20,
+    marginBottom: 20,
+  }
+})
+
+const mapStateToProps: MapStateToProps<StateProps, LoginFormProps, RootState> = (
+  { auth: { email, password, error } }, ownProps) => {
+  return { email, password, error };
 }
 
 export const LoginForm = connect<StateProps, DispatchProps, LoginFormProps, RootState>(mapStateToProps, {
