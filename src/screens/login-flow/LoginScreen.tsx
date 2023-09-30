@@ -1,10 +1,10 @@
 import React from 'react';
-import { SigninScreenProps } from '../models/screen';
-import { LoginForm } from '../components/LoginForm';
+import { SigninScreenProps } from '../../models/screen';
+import { LoginForm } from '../../components/LoginForm';
 import { connect, MapStateToProps } from 'react-redux';
-import { RootState } from '../reducers';
-import { loginUser, navigateToSignup } from '../actions';
-import { User } from '../models/user';
+import { RootState } from '../../reducers';
+import { loginUser, navigateToSignup } from '../../actions';
+import { User } from '../../models/user';
 import { Button } from '@rneui/themed';
 import { View } from 'react-native';
 

@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { SignupScreenProps } from '../models/screen';
-import { LoginForm } from '../components/LoginForm';
+import { SignupScreenProps } from '../../models/screen';
+import { LoginForm } from '../../components/LoginForm';
 import { connect, MapStateToProps } from 'react-redux';
-import { RootState } from '../reducers';
-import { signupUser, navigateToSignin } from '../actions';
-import { User } from '../models/user';
+import { RootState } from '../../reducers';
+import { signupUser, navigateToSignin } from '../../actions';
+import { User } from '../../models/user';
 import { HeaderBackButton } from '@react-navigation/elements';
 
 type Props = SignupScreenProps & StateProps & DispatchProps;
