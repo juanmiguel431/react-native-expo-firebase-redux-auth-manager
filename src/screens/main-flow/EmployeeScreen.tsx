@@ -9,6 +9,7 @@ import { User } from 'firebase/auth';
 import { Feather } from '@expo/vector-icons';
 import { Employee } from '../../models/employee';
 import { useFocusEffect } from '@react-navigation/native';
+import _ from 'lodash';
 
 type Props = EmployeeScreenProps & StateProps & DispatchProps;
 
@@ -67,7 +68,15 @@ type StateProps = {
 }
 
 const mapStateToProps: MapStateToProps<StateProps, EmployeeScreenProps, RootState> = (state) => {
-  return { user: state.auth.user, employees: state.employee.items };
+  console.log(state.employee);
+  return {
+    user: state.auth.user,
+    employees: _.map(state.employee.items, (item: Employee, uid: string) => {
+      return {
+        ...item,
+        id: uid,
+      }
+    })};
 }
 
 type DispatchProps = {

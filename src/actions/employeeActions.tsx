@@ -2,7 +2,6 @@ import { Dispatch } from 'redux';
 import Type from './types';
 import { getDatabase, ref, child, get } from "firebase/database";
 import { getAuth } from 'firebase/auth';
-import { Employee } from '../models/employee';
 
 export const getEmployees = () => async (dispatch: Dispatch) => {
   try {
@@ -19,13 +18,13 @@ export const getEmployees = () => async (dispatch: Dispatch) => {
     const snapshot = await get(child(dbRef, `users/${currentUser.uid}/employees`));
     const response = snapshot.val();
 
-    const employees: Employee[] = []
-    for (const key in response) {
-      const item = response[key];
-      employees.push({ id: key, ...item });
-    }
+    // const employees: Employee[] = []
+    // for (const key in response) {
+    //   const item = response[key];
+    //   employees.push({ id: key, ...item });
+    // }
 
-    dispatch({ type: Type.EmployeeFetchSuccess, payload: employees });
+    dispatch({ type: Type.EmployeeFetchSuccess, payload: response });
 
   } catch (e) {
     if (e instanceof Error) {
