@@ -9,6 +9,9 @@ enum Type {
   SignOutUser = 'SignOutUser',
   SetError = 'SetError',
   ResolveAuth = 'ResolveAuth',
+  EmployeeFetchSuccess = 'EmployeeFetchSuccess',
+  EmployeeLoading = 'EmployeeLoading',
+  EmployeeError = 'EmployeeError',
 }
 
 export default Type;

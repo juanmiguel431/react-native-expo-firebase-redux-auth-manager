@@ -3,8 +3,9 @@ import { Button, Input, Text } from '@rneui/themed';
 import { EmployeeCreateScreenProps } from '../../models/screen';
 import { Platform, StyleSheet, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { getDatabase, set, ref, update, child, push } from 'firebase/database';
+import { getDatabase, ref, update, child, push } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
+import { EmployeeCreate } from '../../models/employee';
 
 const Option = Picker.Item;
 
@@ -30,7 +31,7 @@ const EmployeeCreateScreen: React.FC<EmployeeCreateScreenProps> = ({ navigation 
     }
   }
 
-  const onCreate = useCallback(async ({ name, phone, shift }: { name: string, phone: string, shift: string }) => {
+  const onCreate = useCallback(async ({ name, phone, shift }: EmployeeCreate) => {
     const { currentUser } = getAuth();
     if (!currentUser) return;
     const db = getDatabase();
