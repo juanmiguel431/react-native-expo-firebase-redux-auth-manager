@@ -68,7 +68,6 @@ type StateProps = {
 }
 
 const mapStateToProps: MapStateToProps<StateProps, EmployeeScreenProps, RootState> = (state) => {
-  console.log(state.employee);
   return {
     user: state.auth.user,
     employees: _.map(state.employee.items, (item: Employee, uid: string) => {
