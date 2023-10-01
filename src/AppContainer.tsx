@@ -10,6 +10,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './screens/login-flow/LoginScreen';
 import SignupScreen from './screens/login-flow/SignupScreen';
 import EmployeeScreen from './screens/main-flow/EmployeeScreen';
+import EmployeeCreateScreen from './screens/main-flow/EmployeeCreateScreen';
 
 type Props = StateProps;
 
@@ -28,6 +29,7 @@ const MainFlow: React.FC = () => {
   return (
     <Stack.Navigator initialRouteName={SCREEN.Employee}>
       <Stack.Screen name={SCREEN.Employee} component={EmployeeScreen} options={{ title: 'Employees' }}/>
+      <Stack.Screen name={SCREEN.EmployeeCreate} component={EmployeeCreateScreen} options={{ title: 'Create' }}/>
     </Stack.Navigator>
   );
 };

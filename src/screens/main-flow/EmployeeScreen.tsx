@@ -1,15 +1,30 @@
-import React from 'react';
-import { EmployeeScreenProps } from '../../models/screen';
-import { View } from 'react-native';
+import React, { useEffect } from 'react';
+import { EmployeeScreenProps, SCREEN } from '../../models/screen';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { connect, MapStateToProps } from 'react-redux';
 import { signOutUser } from '../../actions';
 import { RootState } from '../../reducers';
 import { Button, Text } from '@rneui/themed';
 import { User } from 'firebase/auth';
+import { Feather } from '@expo/vector-icons';
 
 type Props = EmployeeScreenProps & StateProps & DispatchProps;
 
-const EmployeeScreen: React.FC<Props> = ({ signOutUser, user }) => {
+const EmployeeScreen: React.FC<Props> = ({ navigation, signOutUser, user }) => {
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate(SCREEN.EmployeeCreate);
+          }}>
+          <Feather name="plus" style={styles.addNew}/>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
+
   return (
     <View>
       <Text>Employee List</Text>
@@ -18,6 +33,13 @@ const EmployeeScreen: React.FC<Props> = ({ signOutUser, user }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  addNew: {
+    fontSize: 30,
+    paddingRight: 25
+  }
+});
 
 type StateProps = {
   user: User | null;
