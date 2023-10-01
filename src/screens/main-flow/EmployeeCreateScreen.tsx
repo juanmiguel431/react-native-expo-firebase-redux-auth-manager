@@ -3,7 +3,7 @@ import { Button, Input, Text } from '@rneui/themed';
 import { EmployeeCreateScreenProps } from '../../models/screen';
 import { Platform, StyleSheet, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { getDatabase, set, ref } from 'firebase/database';
+import { getDatabase, set, ref, update, child, push } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 
 const Option = Picker.Item;
@@ -14,7 +14,7 @@ type PickerStyle = {
   picker?: any;
 }
 
-const EmployeeCreateScreen: React.FC<EmployeeCreateScreenProps> = () => {
+const EmployeeCreateScreen: React.FC<EmployeeCreateScreenProps> = ({ navigation }) => {
 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -64,13 +64,27 @@ const EmployeeCreateScreen: React.FC<EmployeeCreateScreenProps> = () => {
       </View>
       <Button
         title="Create"
-        onPress={() => {
+        onPress={async () => {
           const { currentUser } = getAuth();
           if (!currentUser) return;
-          const db = getDatabase()
+          const db = getDatabase();
+          const refDb = ref(db);
+          const path = `/users/${currentUser.uid}/employees`;
 
-          set(ref(db, `/users/${currentUser.uid}/employees`), { name, phone, shift });
+          const key = push(child(refDb, path)).key;
 
+          const updates = {
+            [`${path}/${key}`]: { name, phone, shift }
+          };
+
+          //https://firebase.google.com/docs/database/web/read-and-write
+          // To simultaneously write to specific children of a node without overwriting other child nodes, use the update() method.
+          await update(refDb, updates);
+
+          // to save data to a specified reference, replacing any existing data at that path.
+          // await set(ref(db, `/users/${currentUser.uid}/employees`), { name, phone, shift });
+
+          navigation.goBack();
         }}/>
     </View>
   );
