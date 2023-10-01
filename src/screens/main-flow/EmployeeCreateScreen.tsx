@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button, Input, Text } from '@rneui/themed';
 import { EmployeeCreateScreenProps } from '../../models/screen';
 import { Platform, StyleSheet, View } from 'react-native';
@@ -29,6 +29,29 @@ const EmployeeCreateScreen: React.FC<EmployeeCreateScreenProps> = ({ navigation 
       picker: { flex: 1 }
     }
   }
+
+  const onCreate = useCallback(async ({ name, phone, shift }: { name: string, phone: string, shift: string }) => {
+    const { currentUser } = getAuth();
+    if (!currentUser) return;
+    const db = getDatabase();
+    const refDb = ref(db);
+    const path = `/users/${currentUser.uid}/employees`;
+
+    const key = push(child(refDb, path)).key;
+
+    const updates = {
+      [`${path}/${key}`]: { name, phone, shift }
+    };
+
+    //https://firebase.google.com/docs/database/web/read-and-write
+    // To simultaneously write to specific children of a node without overwriting other child nodes, use the update() method.
+    await update(refDb, updates);
+
+    // to save data to a specified reference, replacing any existing data at that path.
+    // await set(ref(db, `/users/${currentUser.uid}/employees`), { name, phone, shift });
+
+    navigation.goBack();
+  }, [navigation]);
 
   return (
     <View>
@@ -65,26 +88,7 @@ const EmployeeCreateScreen: React.FC<EmployeeCreateScreenProps> = ({ navigation 
       <Button
         title="Create"
         onPress={async () => {
-          const { currentUser } = getAuth();
-          if (!currentUser) return;
-          const db = getDatabase();
-          const refDb = ref(db);
-          const path = `/users/${currentUser.uid}/employees`;
-
-          const key = push(child(refDb, path)).key;
-
-          const updates = {
-            [`${path}/${key}`]: { name, phone, shift }
-          };
-
-          //https://firebase.google.com/docs/database/web/read-and-write
-          // To simultaneously write to specific children of a node without overwriting other child nodes, use the update() method.
-          await update(refDb, updates);
-
-          // to save data to a specified reference, replacing any existing data at that path.
-          // await set(ref(db, `/users/${currentUser.uid}/employees`), { name, phone, shift });
-
-          navigation.goBack();
+          onCreate({ name, phone, shift });
         }}/>
     </View>
   );
