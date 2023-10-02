@@ -1,14 +1,14 @@
 import Type from '../actions/types';
 
-type State = {
+export type EmployeeFormState = {
   name: string;
   phone: string;
   shift: string;
 }
 
-export type EmployeeFormKeys = keyof State;
+export type EmployeeFormKeys = keyof EmployeeFormState;
 
-const initialState: State = {
+const initialState: EmployeeFormState = {
   name: '',
   phone: '',
   shift: ''
@@ -23,14 +23,21 @@ type ResetAction = {
   type: Type.EmployeeFormReset,
 }
 
-type Action = PropertyChangeAction | ResetAction;
+type SetAction = {
+  type: Type.EmployeeFormSet,
+  payload: EmployeeFormState
+}
 
-const employeeFormReducer = (state: State = initialState, action: Action): State => {
+type Action = PropertyChangeAction | ResetAction | SetAction;
+
+const employeeFormReducer = (state: EmployeeFormState = initialState, action: Action): EmployeeFormState => {
   switch (action.type) {
     case Type.EmployeeFormPropertyChange:
       return { ...state, [action.payload.name]: action.payload.value };
     case Type.EmployeeFormReset:
       return { ...initialState };
+    case Type.EmployeeFormSet:
+      return { ...action.payload };
     default:
       return state;
   }

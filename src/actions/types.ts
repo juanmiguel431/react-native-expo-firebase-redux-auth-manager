@@ -9,11 +9,13 @@ enum Type {
   SignOutUser = 'SignOutUser',
   SetError = 'SetError',
   ResolveAuth = 'ResolveAuth',
-  EmployeeFetchSuccess = 'EmployeeFetchSuccess',
+  EmployeeFetchAllSuccess = 'EmployeeFetchAllSuccess',
+  EmployeeFetchOneSuccess = 'EmployeeFetchOneSuccess',
   EmployeeLoading = 'EmployeeLoading',
   EmployeeError = 'EmployeeError',
   EmployeeFormPropertyChange = 'EmployeeFormPropertyChange',
   EmployeeFormReset = 'EmployeeFormReset',
+  EmployeeFormSet = 'EmployeeFormSet',
 }
 
 export default Type;

@@ -9,6 +9,7 @@ export const enum SCREEN {
   LoginFlow = 'LoginFlow',
   ResolveAuth = 'ResolveAuth',
   EmployeeCreate = 'EmployeeCreate',
+  EmployeeEdit = 'EmployeeEdit',
   EmployeeTab = 'EmployeeTab',
   Account = 'Account',
 }
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   [SCREEN.LoginFlow]: undefined;
   [SCREEN.ResolveAuth]: undefined;
   [SCREEN.EmployeeCreate]: undefined;
+  [SCREEN.EmployeeEdit]: { employeeId: string };
   [SCREEN.EmployeeTab]: undefined;
   [SCREEN.Account]: undefined;
 };
@@ -29,6 +31,7 @@ export type SigninScreenProps = NativeStackScreenProps<RootStackParamList, SCREE
 export type SignupScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.Signup>;
 export type EmployeeScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.Employee>;
 export type EmployeeCreateScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.EmployeeCreate>;
+export type EmployeeEditScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.EmployeeEdit>;
 export type AccountScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.Account>;
 
 export type MainFlowScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.MainFlow>;

@@ -14,6 +14,7 @@ import EmployeeScreen from './screens/main-flow/employee/EmployeeScreen';
 import EmployeeCreateScreen from './screens/main-flow/employee/EmployeeCreateScreen';
 import AccountScreen from './screens/main-flow/AccountScreen';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import EmployeeEditScreen from './screens/main-flow/employee/EmployeeEditScreen';
 
 type Props = StateProps;
 
@@ -34,6 +35,7 @@ const EmployeeTab: React.FC = () => {
     <Stack.Navigator initialRouteName={SCREEN.Employee}>
       <Stack.Screen name={SCREEN.Employee} component={EmployeeScreen} options={{ title: 'Employees' }}/>
       <Stack.Screen name={SCREEN.EmployeeCreate} component={EmployeeCreateScreen} options={{ title: 'Create' }}/>
+      <Stack.Screen name={SCREEN.EmployeeEdit} component={EmployeeEditScreen} options={{ title: 'Edit' }}/>
     </Stack.Navigator>
   );
 };

@@ -1,5 +1,5 @@
 import Type from './types';
-import { EmployeeFormKeys } from '../reducers/employeeFormReducer';
+import { EmployeeFormKeys, EmployeeFormState } from '../reducers/employeeFormReducer';
 
 export const changeProperty = (name: EmployeeFormKeys, value: string) => {
   return {
@@ -8,8 +8,15 @@ export const changeProperty = (name: EmployeeFormKeys, value: string) => {
   }
 };
 
-export const reset = () => {
+export const employeeFormReset = () => {
   return {
     type: Type.EmployeeFormReset,
+  }
+};
+
+export const employeeFormSet = (formValues: EmployeeFormState) => {
+  return {
+    type: Type.EmployeeFormSet,
+    payload: formValues
   }
 };

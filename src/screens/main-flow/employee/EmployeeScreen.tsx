@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { EmployeeScreenProps, SCREEN } from '../../../models/screen';
-import { StyleSheet, TouchableOpacity, View, FlatList } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { connect, MapStateToProps } from 'react-redux';
 import { getEmployees } from '../../../actions';
 import { RootState } from '../../../reducers';
@@ -37,10 +37,14 @@ const EmployeeScreen: React.FC<Props> = ({ navigation, getEmployees, employees }
       <FlatList
         data={employees}
         keyExtractor={item => item.name}
-        renderItem={({ item: { name } }) => (
+        renderItem={({ item: { name, id } }) => (
           <ListItem>
             <ListItem.Content>
-              <ListItem.Title>{name}</ListItem.Title>
+              <TouchableOpacity
+                onPress={() => navigation.navigate(SCREEN.EmployeeEdit, { employeeId: id })}
+              >
+                <ListItem.Title>{name}</ListItem.Title>
+              </TouchableOpacity>
             </ListItem.Content>
           </ListItem>
         )}
@@ -61,7 +65,10 @@ type StateProps = {
 }
 
 const mapStateToProps: MapStateToProps<StateProps, EmployeeScreenProps, RootState> = (state) => {
-  const employees: Employee[] = _.map(state.employee.items, (item: Employee, uid: string) =>({ ...item, id: uid, })) as any;
+  const employees: Employee[] = _.map(state.employee.items, (item: Employee, uid: string) => ({
+    ...item,
+    id: uid,
+  })) as any;
   return { employees: employees };
 }
 

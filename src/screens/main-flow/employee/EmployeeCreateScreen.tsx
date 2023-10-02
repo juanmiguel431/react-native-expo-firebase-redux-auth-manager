@@ -9,7 +9,7 @@ import EmployeeForm from '../../../components/EmployeeForm';
 import { connect, MapStateToProps } from 'react-redux';
 import { RootState } from '../../../reducers';
 import { useFocusEffect } from '@react-navigation/native';
-import { reset } from '../../../actions/employeeFormActions';
+import { employeeFormReset } from '../../../actions/employeeFormActions';
 
 type Props = EmployeeCreateScreenProps & StateProps & DispatchProps;
 
@@ -48,7 +48,7 @@ const EmployeeCreateScreen: React.FC<Props> = ({ navigation, name, phone, shift,
       <EmployeeForm />
       <Button
         title="Create"
-        onPress={async () => {
+        onPress={() => {
           onCreate({ name, phone, shift });
         }}/>
     </View>
@@ -68,9 +68,9 @@ const mapStateToPros: MapStateToProps<StateProps, EmployeeCreateScreenProps, Roo
 };
 
 type DispatchProps = {
-  reset: typeof reset;
+  reset: typeof employeeFormReset;
 }
 
 export default connect<StateProps, DispatchProps, EmployeeCreateScreenProps, RootState>(mapStateToPros, {
-  reset
+  reset: employeeFormReset
 })(EmployeeCreateScreen);
