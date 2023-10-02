@@ -86,7 +86,7 @@ const EmployeeEditScreen: React.FC<Props> = (
           onPress={async () => {
             const isAvailable = await SMS.isAvailableAsync();
             if (isAvailable) {
-              const { result } = await SMS.sendSMSAsync(employee.phone, 'My sample HelloWorld message');
+              const { result } = await SMS.sendSMSAsync(employee.phone, `Hi ${employee.name}, `);
             } else {
               setShowSmsDialog(true);
             }
