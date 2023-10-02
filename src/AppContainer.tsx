@@ -7,14 +7,18 @@ import { RootState } from './reducers';
 import { RootStackParamList, SCREEN } from './models/screen';
 import ResolveAuthScreen from './screens/ResolveAuthScreen';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LoginScreen from './screens/login-flow/LoginScreen';
 import SignupScreen from './screens/login-flow/SignupScreen';
-import EmployeeScreen from './screens/main-flow/EmployeeScreen';
-import EmployeeCreateScreen from './screens/main-flow/EmployeeCreateScreen';
+import EmployeeScreen from './screens/main-flow/employee/EmployeeScreen';
+import EmployeeCreateScreen from './screens/main-flow/employee/EmployeeCreateScreen';
+import AccountScreen from './screens/main-flow/AccountScreen';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 
 type Props = StateProps;
 
 const Stack = createStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<RootStackParamList>();
 
 const LoginFlow: React.FC = () => {
   return (
@@ -25,12 +29,40 @@ const LoginFlow: React.FC = () => {
   );
 };
 
-const MainFlow: React.FC = () => {
+const EmployeeTab: React.FC = () => {
   return (
     <Stack.Navigator initialRouteName={SCREEN.Employee}>
       <Stack.Screen name={SCREEN.Employee} component={EmployeeScreen} options={{ title: 'Employees' }}/>
       <Stack.Screen name={SCREEN.EmployeeCreate} component={EmployeeCreateScreen} options={{ title: 'Create' }}/>
     </Stack.Navigator>
+  );
+};
+
+const MainFlow: React.FC = () => {
+  return (
+    <Tab.Navigator initialRouteName={SCREEN.Employee}>
+      <Tab.Screen
+        name={SCREEN.EmployeeTab}
+        component={EmployeeTab}
+        options={{
+          headerShown: false,
+          title: 'Employees',
+          tabBarIcon: ({ focused }) => {
+            return <FontAwesome name={focused ? 'user' : 'user-o'} />
+          }
+      }}
+      />
+      <Tab.Screen
+        name={SCREEN.Account}
+        component={AccountScreen}
+        options={{
+          title: 'Account',
+          tabBarIcon: ({ focused }) => {
+            return <Ionicons name={focused ? 'settings' : 'settings-outline'} />
+          }
+      }}
+      />
+    </Tab.Navigator>
   );
 };
 

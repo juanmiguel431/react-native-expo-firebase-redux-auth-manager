@@ -1,19 +1,18 @@
 import React, { useCallback, useEffect } from 'react';
-import { EmployeeScreenProps, SCREEN } from '../../models/screen';
+import { EmployeeScreenProps, SCREEN } from '../../../models/screen';
 import { StyleSheet, TouchableOpacity, View, FlatList } from 'react-native';
 import { connect, MapStateToProps } from 'react-redux';
-import { getEmployees, signOutUser } from '../../actions';
-import { RootState } from '../../reducers';
-import { Button, Text, ListItem } from '@rneui/themed';
-import { User } from 'firebase/auth';
+import { getEmployees } from '../../../actions';
+import { RootState } from '../../../reducers';
+import { ListItem } from '@rneui/themed';
 import { Feather } from '@expo/vector-icons';
-import { Employee } from '../../models/employee';
+import { Employee } from '../../../models/employee';
 import { useFocusEffect } from '@react-navigation/native';
 import _ from 'lodash';
 
 type Props = EmployeeScreenProps & StateProps & DispatchProps;
 
-const EmployeeScreen: React.FC<Props> = ({ navigation, signOutUser, getEmployees, employees, user }) => {
+const EmployeeScreen: React.FC<Props> = ({ navigation, getEmployees, employees }) => {
 
   useEffect(() => {
     navigation.setOptions({
@@ -35,8 +34,6 @@ const EmployeeScreen: React.FC<Props> = ({ navigation, signOutUser, getEmployees
 
   return (
     <View>
-      <Text>Employee List</Text>
-      <Text>{user?.email}</Text>
       <FlatList
         data={employees}
         keyExtractor={item => item.name}
@@ -50,7 +47,6 @@ const EmployeeScreen: React.FC<Props> = ({ navigation, signOutUser, getEmployees
           </ListItem>
         )}
       />
-      <Button onPress={signOutUser} title="Sign Out"/>
     </View>
   );
 };
@@ -63,26 +59,18 @@ const styles = StyleSheet.create({
 });
 
 type StateProps = {
-  user: User | null;
   employees: Employee[];
 }
 
 const mapStateToProps: MapStateToProps<StateProps, EmployeeScreenProps, RootState> = (state) => {
-  return {
-    user: state.auth.user,
-    employees: _.map(state.employee.items, (item: Employee, uid: string) => {
-      return {
-        ...item,
-        id: uid,
-      }
-    })};
+  const employees: Employee[] = _.map(state.employee.items, (item: Employee, uid: string) =>({ ...item, id: uid, })) as any;
+  return { employees: employees };
 }
 
 type DispatchProps = {
-  signOutUser: () => void;
   getEmployees: () => void;
 }
 
 export default connect<StateProps, DispatchProps, EmployeeScreenProps, RootState>(mapStateToProps, {
-  signOutUser, getEmployees
+  getEmployees
 })(EmployeeScreen);

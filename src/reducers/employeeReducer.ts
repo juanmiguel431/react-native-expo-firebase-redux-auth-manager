@@ -30,7 +30,7 @@ type EmployeeError = {
 
 type Actions = EmployeeFetch | EmployeeLoading | EmployeeError;
 
-const employeeReducer = (state = initialState, action: Actions): State => {
+const employeeReducer = (state: State = initialState, action: Actions): State => {
   switch (action.type) {
     case Type.EmployeeFetchSuccess:
       return { ...state, items: action.payload, error: '' };

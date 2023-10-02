@@ -9,6 +9,8 @@ export const enum SCREEN {
   LoginFlow = 'LoginFlow',
   ResolveAuth = 'ResolveAuth',
   EmployeeCreate = 'EmployeeCreate',
+  EmployeeTab = 'EmployeeTab',
+  Account = 'Account',
 }
 
 export type RootStackParamList = {
@@ -19,16 +21,20 @@ export type RootStackParamList = {
   [SCREEN.LoginFlow]: undefined;
   [SCREEN.ResolveAuth]: undefined;
   [SCREEN.EmployeeCreate]: undefined;
+  [SCREEN.EmployeeTab]: undefined;
+  [SCREEN.Account]: undefined;
 };
 
 export type SigninScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.Signin>;
 export type SignupScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.Signup>;
 export type EmployeeScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.Employee>;
 export type EmployeeCreateScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.EmployeeCreate>;
+export type AccountScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.Account>;
 
 export type MainFlowScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.MainFlow>;
 export type LoginFlowScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.LoginFlow>;
 export type ResolveAuthScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.ResolveAuth>;
+export type EmployeeTabScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.EmployeeTab>;
 
 export type NavigationProps = NativeStackNavigationProp<RootStackParamList>;
 export type RouteProps = RouteProp<RootStackParamList>;

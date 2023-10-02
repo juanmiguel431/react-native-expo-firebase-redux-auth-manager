@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { Button, Input, Text } from '@rneui/themed';
-import { EmployeeCreateScreenProps } from '../../models/screen';
+import { EmployeeCreateScreenProps } from '../../../models/screen';
 import { Platform, StyleSheet, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { getDatabase, ref, update, child, push } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
-import { EmployeeCreate } from '../../models/employee';
+import { EmployeeCreate } from '../../../models/employee';
 
 const Option = Picker.Item;
 
