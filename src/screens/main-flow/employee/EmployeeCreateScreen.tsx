@@ -21,11 +21,11 @@ const EmployeeCreateScreen: React.FC<Props> = ({ navigation, name, phone, shift,
 
   return (
     <View>
-      <EmployeeForm />
+      <EmployeeForm/>
       <Button
         title="Create"
         onPress={async () => {
-          await createEmployee({ name, phone, shift });
+          await createEmployee({ name, phone, shift: (shift || 'Monday') });
           navigation.goBack();
         }}/>
     </View>
@@ -40,7 +40,7 @@ type StateProps = {
   shift: string;
 };
 
-const mapStateToPros: MapStateToProps<StateProps, EmployeeCreateScreenProps, RootState> = ({ employeeForm}) => {
+const mapStateToPros: MapStateToProps<StateProps, EmployeeCreateScreenProps, RootState> = ({ employeeForm }) => {
   return { ...employeeForm };
 };
 
