@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { Button } from '@rneui/themed';
 import { EmployeeEditScreenProps } from '../../../models/screen';
 import { StyleSheet, View } from 'react-native';
-import { getDatabase, ref, update } from 'firebase/database';
+import { getDatabase, ref, update, remove } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 import { Employee } from '../../../models/employee';
 import EmployeeForm from '../../../components/EmployeeForm';
@@ -43,6 +43,19 @@ const EmployeeEditScreen: React.FC<Props> = (
     navigation.goBack();
   }, [navigation]);
 
+  const onDelete = useCallback(async (employeeId: string) => {
+    const { currentUser } = getAuth();
+    if (!currentUser) return;
+    const db = getDatabase();
+
+    const path = `/users/${currentUser.uid}/employees/${employeeId}`;
+    const refDb = ref(db, path);
+
+    await remove(refDb);
+
+    navigation.goBack();
+  }, [navigation]);
+
   return (
     <View>
       <EmployeeForm/>
@@ -50,7 +63,14 @@ const EmployeeEditScreen: React.FC<Props> = (
         title="Save"
         onPress={() => {
           onSave(employeeId, form);
-        }}/>
+        }}
+      />
+      <Button
+        title="Delete"
+        onPress={() => {
+          onDelete(employeeId);
+        }}
+      />
     </View>
   );
 };
