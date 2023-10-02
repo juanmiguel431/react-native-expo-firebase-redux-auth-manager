@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { Button } from '@rneui/themed';
+import React, { useCallback, useState } from 'react';
+import { Button, Dialog, Text } from '@rneui/themed';
 import { EmployeeEditScreenProps } from '../../../models/screen';
 import { StyleSheet, View } from 'react-native';
 import { getDatabase, ref, update, remove } from 'firebase/database';
@@ -19,6 +19,9 @@ const EmployeeEditScreen: React.FC<Props> = (
   { navigation, route, employee, getEmployee, employeeFormSet, reset, form
   }) => {
   const employeeId = route.params.employeeId;
+
+  const [showDialog, setShowDialog] = useState(false);
+
   useFocusEffect(
     useCallback(() => {
       reset();
@@ -64,10 +67,21 @@ const EmployeeEditScreen: React.FC<Props> = (
       />
       <Button
         title="Delete"
-        onPress={() => {
-          onDelete(employeeId);
-        }}
+        color="error"
+        onPress={() => setShowDialog(true)}
       />
+
+      <Dialog
+        isVisible={showDialog}
+        onBackdropPress={() => setShowDialog(false)}
+      >
+        <Dialog.Title title="Are you sure you want to delete this?"/>
+        <Text>This operation cannot be reverted.</Text>
+        <Dialog.Actions>
+          <Dialog.Button title="Yes" onPress={() => onDelete(employeeId)}/>
+          <Dialog.Button title="Cancel" onPress={() => setShowDialog(false)}/>
+        </Dialog.Actions>
+      </Dialog>
     </View>
   );
 };
