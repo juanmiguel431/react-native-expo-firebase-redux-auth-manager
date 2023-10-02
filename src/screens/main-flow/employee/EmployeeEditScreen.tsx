@@ -17,7 +17,8 @@ import { EmployeeFormState } from '../../../reducers/employeeFormReducer';
 type Props = EmployeeEditScreenProps & StateProps & DispatchProps;
 
 const EmployeeEditScreen: React.FC<Props> = (
-  { navigation, route, employee, getEmployee, employeeFormSet, reset, form
+  {
+    navigation, route, employee, getEmployee, employeeFormSet, reset, form
   }) => {
   const employeeId = route.params.employeeId;
 
@@ -61,30 +62,37 @@ const EmployeeEditScreen: React.FC<Props> = (
   return (
     <View>
       <EmployeeForm/>
-      <Button
-        title="Save"
-        onPress={() => {
-          onSave(employeeId, form);
-        }}
-      />
-      <Button
-        title="Delete"
-        color="error"
-        onPress={() => setShowDialog(true)}
-      />
-      <Button
-        title="Send Message"
-        color="secondary"
-        onPress={async () => {
-          const isAvailable = await SMS.isAvailableAsync();
-          if (isAvailable) {
-            const { result } = await SMS.sendSMSAsync(employee.phone, 'My sample HelloWorld message');
-          } else {
-            setShowSmsDialog(true);
-            // misfortune... there's no SMS available on this device
-          }
-        }}
-      />
+
+      <View style={styles.button}>
+        <Button
+          title="Save"
+          onPress={() => {
+            onSave(employeeId, form);
+          }}
+        />
+      </View>
+      <View style={styles.button}>
+        <Button
+          title="Delete"
+          color="error"
+          onPress={() => setShowDialog(true)}
+        />
+      </View>
+      <View style={styles.button}>
+        <Button
+          title="Send Message"
+          color="secondary"
+          buttonStyle={{ backgroundColor: 'rgba(111, 202, 186, 1)' }}
+          onPress={async () => {
+            const isAvailable = await SMS.isAvailableAsync();
+            if (isAvailable) {
+              const { result } = await SMS.sendSMSAsync(employee.phone, 'My sample HelloWorld message');
+            } else {
+              setShowSmsDialog(true);
+            }
+          }}
+        />
+      </View>
 
       <Dialog
         isVisible={showDialog}
@@ -109,7 +117,11 @@ const EmployeeEditScreen: React.FC<Props> = (
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  button: {
+    margin: 15,
+  }
+});
 
 type StateProps = {
   employee: Employee;
