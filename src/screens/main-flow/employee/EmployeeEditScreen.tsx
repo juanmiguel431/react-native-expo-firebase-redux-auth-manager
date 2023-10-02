@@ -9,6 +9,7 @@ import EmployeeForm from '../../../components/EmployeeForm';
 import { connect, MapStateToProps } from 'react-redux';
 import { RootState } from '../../../reducers';
 import { useFocusEffect } from '@react-navigation/native';
+import * as SMS from 'expo-sms';
 import { employeeFormReset, employeeFormSet } from '../../../actions/employeeFormActions';
 import { getEmployee } from '../../../actions';
 import { EmployeeFormState } from '../../../reducers/employeeFormReducer';
@@ -21,6 +22,7 @@ const EmployeeEditScreen: React.FC<Props> = (
   const employeeId = route.params.employeeId;
 
   const [showDialog, setShowDialog] = useState(false);
+  const [showSmsDialog, setShowSmsDialog] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -70,6 +72,19 @@ const EmployeeEditScreen: React.FC<Props> = (
         color="error"
         onPress={() => setShowDialog(true)}
       />
+      <Button
+        title="Send Message"
+        color="secondary"
+        onPress={async () => {
+          const isAvailable = await SMS.isAvailableAsync();
+          if (isAvailable) {
+            const { result } = await SMS.sendSMSAsync(employee.phone, 'My sample HelloWorld message');
+          } else {
+            setShowSmsDialog(true);
+            // misfortune... there's no SMS available on this device
+          }
+        }}
+      />
 
       <Dialog
         isVisible={showDialog}
@@ -81,6 +96,14 @@ const EmployeeEditScreen: React.FC<Props> = (
           <Dialog.Button title="Yes" onPress={() => onDelete(employeeId)}/>
           <Dialog.Button title="Cancel" onPress={() => setShowDialog(false)}/>
         </Dialog.Actions>
+      </Dialog>
+
+      <Dialog
+        isVisible={showSmsDialog}
+        onBackdropPress={() => setShowSmsDialog(false)}
+      >
+        <Dialog.Title title="Misfortune..."/>
+        <Text>There is no SMS available on this device</Text>
       </Dialog>
     </View>
   );
