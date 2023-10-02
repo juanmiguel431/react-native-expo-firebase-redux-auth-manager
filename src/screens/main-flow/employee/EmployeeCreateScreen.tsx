@@ -2,54 +2,31 @@ import React, { useCallback } from 'react';
 import { Button } from '@rneui/themed';
 import { EmployeeCreateScreenProps } from '../../../models/screen';
 import { StyleSheet, View } from 'react-native';
-import { getDatabase, ref, update, child, push } from 'firebase/database';
-import { getAuth } from 'firebase/auth';
 import { EmployeeCreate } from '../../../models/employee';
 import EmployeeForm from '../../../components/EmployeeForm';
 import { connect, MapStateToProps } from 'react-redux';
 import { RootState } from '../../../reducers';
 import { useFocusEffect } from '@react-navigation/native';
 import { employeeFormReset } from '../../../actions/employeeFormActions';
+import { createEmployee } from '../../../actions';
 
 type Props = EmployeeCreateScreenProps & StateProps & DispatchProps;
 
-const EmployeeCreateScreen: React.FC<Props> = ({ navigation, name, phone, shift, reset }) => {
+const EmployeeCreateScreen: React.FC<Props> = ({ navigation, name, phone, shift, reset, createEmployee }) => {
 
   useFocusEffect(
     useCallback(() => {
       reset();
     }, [reset]));
 
-  const onCreate = useCallback(async ({ name, phone, shift }: EmployeeCreate) => {
-    const { currentUser } = getAuth();
-    if (!currentUser) return;
-    const db = getDatabase();
-    const refDb = ref(db);
-    const path = `/users/${currentUser.uid}/employees`;
-
-    const key = push(child(refDb, path)).key;
-
-    const updates = {
-      [`${path}/${key}`]: { name, phone, shift }
-    };
-
-    //https://firebase.google.com/docs/database/web/read-and-write
-    // To simultaneously write to specific children of a node without overwriting other child nodes, use the update() method.
-    await update(refDb, updates);
-
-    // to save data to a specified reference, replacing any existing data at that path.
-    // await set(ref(db, `/users/${currentUser.uid}/employees`), { name, phone, shift });
-
-    navigation.goBack();
-  }, [navigation]);
-
   return (
     <View>
       <EmployeeForm />
       <Button
         title="Create"
-        onPress={() => {
-          onCreate({ name, phone, shift });
+        onPress={async () => {
+          await createEmployee({ name, phone, shift });
+          navigation.goBack();
         }}/>
     </View>
   );
@@ -69,8 +46,10 @@ const mapStateToPros: MapStateToProps<StateProps, EmployeeCreateScreenProps, Roo
 
 type DispatchProps = {
   reset: typeof employeeFormReset;
+  createEmployee: (employee: EmployeeCreate) => Promise<void>
 }
 
 export default connect<StateProps, DispatchProps, EmployeeCreateScreenProps, RootState>(mapStateToPros, {
-  reset: employeeFormReset
+  reset: employeeFormReset,
+  createEmployee
 })(EmployeeCreateScreen);

@@ -1,8 +1,9 @@
 import { Dispatch } from 'redux';
 import Type from './types';
-import { getDatabase, ref, child, get } from "firebase/database";
+import { getDatabase, ref, child, get, push, update, remove } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
-import { Employee } from '../models/employee';
+import { Employee, EmployeeCreate } from '../models/employee';
+import { EmployeeFormState } from '../reducers/employeeFormReducer';
 
 export const getEmployees = () => async (dispatch: Dispatch) => {
   try {
@@ -56,4 +57,45 @@ export const getEmployee = (id: string) => async (dispatch: Dispatch): Promise<E
   } finally {
     dispatch({ type: Type.EmployeeLoading, payload: false });
   }
+}
+
+export const createEmployee = (employee: EmployeeCreate) => async (dispatch: Dispatch) => {
+  const { currentUser } = getAuth();
+  if (!currentUser) return;
+  const db = getDatabase();
+  const refDb = ref(db);
+  const path = `/users/${currentUser.uid}/employees`;
+
+  const key = push(child(refDb, path)).key;
+
+  const updates = { [`${path}/${key}`]: employee };
+
+  //https://firebase.google.com/docs/database/web/read-and-write
+  // To simultaneously write to specific children of a node without overwriting other child nodes, use the update() method.
+  await update(refDb, updates);
+
+  // to save data to a specified reference, replacing any existing data at that path.
+  // await set(ref(db, `/users/${currentUser.uid}/employees`), { name, phone, shift });
+};
+
+export const updateEmployee = (employeeId: string, employee: EmployeeFormState) => async (dispatch: Dispatch) => {
+  const { currentUser } = getAuth();
+  if (!currentUser) return;
+  const db = getDatabase();
+
+  const path = `/users/${currentUser.uid}/employees/${employeeId}`;
+  const refDb = ref(db, path);
+
+  await update(refDb, employee);
+}
+
+export const deleteEmployee = (employeeId: string) => async (dispatch: Dispatch) => {
+  const { currentUser } = getAuth();
+  if (!currentUser) return;
+  const db = getDatabase();
+
+  const path = `/users/${currentUser.uid}/employees/${employeeId}`;
+  const refDb = ref(db, path);
+
+  await remove(refDb);
 }

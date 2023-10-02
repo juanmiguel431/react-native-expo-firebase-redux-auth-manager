@@ -2,8 +2,6 @@ import React, { useCallback, useState } from 'react';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { EmployeeEditScreenProps } from '../../../models/screen';
 import { StyleSheet, View } from 'react-native';
-import { getDatabase, ref, update, remove } from 'firebase/database';
-import { getAuth } from 'firebase/auth';
 import { Employee } from '../../../models/employee';
 import EmployeeForm from '../../../components/EmployeeForm';
 import { connect, MapStateToProps } from 'react-redux';
@@ -11,14 +9,14 @@ import { RootState } from '../../../reducers';
 import { useFocusEffect } from '@react-navigation/native';
 import * as SMS from 'expo-sms';
 import { employeeFormReset, employeeFormSet } from '../../../actions/employeeFormActions';
-import { getEmployee } from '../../../actions';
+import { deleteEmployee, getEmployee, updateEmployee } from '../../../actions';
 import { EmployeeFormState } from '../../../reducers/employeeFormReducer';
 
 type Props = EmployeeEditScreenProps & StateProps & DispatchProps;
 
 const EmployeeEditScreen: React.FC<Props> = (
   {
-    navigation, route, employee, getEmployee, employeeFormSet, reset, form
+    navigation, route, employee, getEmployee, employeeFormSet, reset, form, updateEmployee, deleteEmployee
   }) => {
   const employeeId = route.params.employeeId;
 
@@ -33,32 +31,6 @@ const EmployeeEditScreen: React.FC<Props> = (
       });
     }, [reset, getEmployee, employeeId, employeeFormSet]));
 
-  const onSave = useCallback(async (employeeId: string, employee: EmployeeFormState) => {
-    const { currentUser } = getAuth();
-    if (!currentUser) return;
-    const db = getDatabase();
-
-    const path = `/users/${currentUser.uid}/employees/${employeeId}`;
-    const refDb = ref(db, path);
-
-    await update(refDb, employee);
-
-    navigation.goBack();
-  }, [navigation]);
-
-  const onDelete = useCallback(async (employeeId: string) => {
-    const { currentUser } = getAuth();
-    if (!currentUser) return;
-    const db = getDatabase();
-
-    const path = `/users/${currentUser.uid}/employees/${employeeId}`;
-    const refDb = ref(db, path);
-
-    await remove(refDb);
-
-    navigation.goBack();
-  }, [navigation]);
-
   return (
     <View>
       <EmployeeForm/>
@@ -66,8 +38,9 @@ const EmployeeEditScreen: React.FC<Props> = (
       <View style={styles.button}>
         <Button
           title="Save"
-          onPress={() => {
-            onSave(employeeId, form);
+          onPress={async () => {
+            await updateEmployee(employeeId, form);
+            navigation.goBack();
           }}
         />
       </View>
@@ -82,7 +55,7 @@ const EmployeeEditScreen: React.FC<Props> = (
         <Button
           title="Send Message"
           color="secondary"
-          buttonStyle={{ backgroundColor: 'rgba(111, 202, 186, 1)' }}
+          buttonStyle={styles.sendMessage}
           onPress={async () => {
             const isAvailable = await SMS.isAvailableAsync();
             if (isAvailable) {
@@ -101,7 +74,10 @@ const EmployeeEditScreen: React.FC<Props> = (
         <Dialog.Title title="Are you sure you want to delete this?"/>
         <Text>This operation cannot be reverted.</Text>
         <Dialog.Actions>
-          <Dialog.Button title="Yes" onPress={() => onDelete(employeeId)}/>
+          <Dialog.Button title="Yes" onPress={async () => {
+            await deleteEmployee(employeeId);
+            navigation.goBack();
+          }}/>
           <Dialog.Button title="Cancel" onPress={() => setShowDialog(false)}/>
         </Dialog.Actions>
       </Dialog>
@@ -120,6 +96,9 @@ const EmployeeEditScreen: React.FC<Props> = (
 const styles = StyleSheet.create({
   button: {
     margin: 15,
+  },
+  sendMessage: {
+    backgroundColor: 'rgba(111, 202, 186, 1)'
   }
 });
 
@@ -140,8 +119,10 @@ type DispatchProps = {
   reset: typeof employeeFormReset;
   employeeFormSet: typeof employeeFormSet;
   getEmployee: (id: string) => Promise<Employee | undefined>;
+  updateEmployee: (employeeId: string, employee: EmployeeFormState) => Promise<void>;
+  deleteEmployee: (employeeId: string) => Promise<void>;
 }
 
 export default connect<StateProps, DispatchProps, EmployeeEditScreenProps, RootState>(mapStateToPros, {
-  reset: employeeFormReset, getEmployee, employeeFormSet
+  reset: employeeFormReset, getEmployee, employeeFormSet, updateEmployee, deleteEmployee
 })(EmployeeEditScreen);
