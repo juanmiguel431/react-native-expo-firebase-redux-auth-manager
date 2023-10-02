@@ -13,6 +13,7 @@ enum Type {
   EmployeeLoading = 'EmployeeLoading',
   EmployeeError = 'EmployeeError',
   EmployeeFormPropertyChange = 'EmployeeFormPropertyChange',
+  EmployeeFormReset = 'EmployeeFormReset',
 }
 
 export default Type;

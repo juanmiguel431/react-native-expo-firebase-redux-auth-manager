@@ -8,10 +8,17 @@ import { EmployeeCreate } from '../../../models/employee';
 import EmployeeForm from '../../../components/EmployeeForm';
 import { connect, MapStateToProps } from 'react-redux';
 import { RootState } from '../../../reducers';
+import { useFocusEffect } from '@react-navigation/native';
+import { reset } from '../../../actions/employeeFormActions';
 
-type Props = EmployeeCreateScreenProps & StateProps;
+type Props = EmployeeCreateScreenProps & StateProps & DispatchProps;
 
-const EmployeeCreateScreen: React.FC<Props> = ({ navigation, name, phone, shift }) => {
+const EmployeeCreateScreen: React.FC<Props> = ({ navigation, name, phone, shift, reset }) => {
+
+  useFocusEffect(
+    useCallback(() => {
+      reset();
+    }, [reset]));
 
   const onCreate = useCallback(async ({ name, phone, shift }: EmployeeCreate) => {
     const { currentUser } = getAuth();
@@ -60,4 +67,10 @@ const mapStateToPros: MapStateToProps<StateProps, EmployeeCreateScreenProps, Roo
   return { ...employeeForm };
 };
 
-export default connect<StateProps, {}, EmployeeCreateScreenProps, RootState>(mapStateToPros)(EmployeeCreateScreen);
+type DispatchProps = {
+  reset: typeof reset;
+}
+
+export default connect<StateProps, DispatchProps, EmployeeCreateScreenProps, RootState>(mapStateToPros, {
+  reset
+})(EmployeeCreateScreen);

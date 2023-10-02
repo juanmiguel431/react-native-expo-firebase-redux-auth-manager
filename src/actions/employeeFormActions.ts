@@ -7,3 +7,9 @@ export const changeProperty = (name: EmployeeFormKeys, value: string) => {
     payload: { name, value }
   }
 };
+
+export const reset = () => {
+  return {
+    type: Type.EmployeeFormReset,
+  }
+};
