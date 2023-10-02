@@ -31,14 +31,11 @@ const EmployeeEditScreen: React.FC<Props> = (
     const { currentUser } = getAuth();
     if (!currentUser) return;
     const db = getDatabase();
-    const refDb = ref(db);
-    const path = `/users/${currentUser.uid}/employees`;
 
-    const updates = {
-      [`${path}/${employeeId}`]: employee
-    };
+    const path = `/users/${currentUser.uid}/employees/${employeeId}`;
+    const refDb = ref(db, path);
 
-    await update(refDb, updates);
+    await update(refDb, employee);
 
     navigation.goBack();
   }, [navigation]);
