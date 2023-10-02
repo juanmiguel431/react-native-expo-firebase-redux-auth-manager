@@ -40,7 +40,7 @@ const EmployeeTab: React.FC = () => {
 
 const MainFlow: React.FC = () => {
   return (
-    <Tab.Navigator initialRouteName={SCREEN.Employee}>
+    <Tab.Navigator initialRouteName={SCREEN.Employee} screenOptions={{ tabBarHideOnKeyboard: true }}>
       <Tab.Screen
         name={SCREEN.EmployeeTab}
         component={EmployeeTab}

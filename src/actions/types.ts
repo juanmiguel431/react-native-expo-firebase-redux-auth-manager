@@ -12,6 +12,7 @@ enum Type {
   EmployeeFetchSuccess = 'EmployeeFetchSuccess',
   EmployeeLoading = 'EmployeeLoading',
   EmployeeError = 'EmployeeError',
+  EmployeeFormPropertyChange = 'EmployeeFormPropertyChange',
 }
 
 export default Type;

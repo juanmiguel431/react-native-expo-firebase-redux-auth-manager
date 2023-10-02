@@ -1,35 +1,17 @@
-import React, { useCallback, useState } from 'react';
-import { Button, Input, Text } from '@rneui/themed';
+import React, { useCallback } from 'react';
+import { Button } from '@rneui/themed';
 import { EmployeeCreateScreenProps } from '../../../models/screen';
-import { Platform, StyleSheet, View } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { StyleSheet, View } from 'react-native';
 import { getDatabase, ref, update, child, push } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 import { EmployeeCreate } from '../../../models/employee';
+import EmployeeForm from '../../../components/EmployeeForm';
+import { connect, MapStateToProps } from 'react-redux';
+import { RootState } from '../../../reducers';
 
-const Option = Picker.Item;
+type Props = EmployeeCreateScreenProps & StateProps;
 
-type PickerStyle = {
-  container?: any;
-  label?: any;
-  picker?: any;
-}
-
-const EmployeeCreateScreen: React.FC<EmployeeCreateScreenProps> = ({ navigation }) => {
-
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [shift, setShift] = useState('Monday');
-
-
-  let pickerStyle: PickerStyle = {};
-  if (Platform.OS === 'ios') {
-    pickerStyle = {
-      container: { flexDirection: 'row' },
-      label: { alignSelf: 'center' },
-      picker: { flex: 1 }
-    }
-  }
+const EmployeeCreateScreen: React.FC<Props> = ({ navigation, name, phone, shift }) => {
 
   const onCreate = useCallback(async ({ name, phone, shift }: EmployeeCreate) => {
     const { currentUser } = getAuth();
@@ -56,36 +38,7 @@ const EmployeeCreateScreen: React.FC<EmployeeCreateScreenProps> = ({ navigation 
 
   return (
     <View>
-      <Input
-        label="Name"
-        placeholder="Juan Miguel"
-        value={name}
-        onChangeText={setName}
-      />
-      <Input
-        label="Phone"
-        placeholder="555-555-5555"
-        keyboardType="numeric"
-        textContentType="telephoneNumber"
-        value={phone}
-        onChangeText={setPhone}
-      />
-      <View style={[styles.pickerContainer, pickerStyle.container]}>
-        <Text style={[styles.pickerLabel, pickerStyle.label]}>Shift</Text>
-        <Picker
-          style={[styles.picker, pickerStyle.picker]}
-          selectedValue={shift}
-          onValueChange={setShift}
-        >
-          <Option label="Monday" value="Monday"/>
-          <Option label="Tuesday" value="Tuesday"/>
-          <Option label="Wednesday" value="Wednesday"/>
-          <Option label="Thursday" value="Thursday"/>
-          <Option label="Friday" value="Friday"/>
-          <Option label="Saturday" value="Saturday"/>
-          <Option label="Sunday" value="Sunday"/>
-        </Picker>
-      </View>
+      <EmployeeForm />
       <Button
         title="Create"
         onPress={async () => {
@@ -95,14 +48,16 @@ const EmployeeCreateScreen: React.FC<EmployeeCreateScreenProps> = ({ navigation 
   );
 };
 
-const styles = StyleSheet.create({
-  picker: {},
-  pickerContainer: {},
-  pickerLabel: {
-    color: 'gray',
-    fontSize: 18,
-    paddingLeft: 10
-  },
-})
+const styles = StyleSheet.create({});
 
-export default EmployeeCreateScreen;
+type StateProps = {
+  name: string;
+  phone: string;
+  shift: string;
+};
+
+const mapStateToPros: MapStateToProps<StateProps, EmployeeCreateScreenProps, RootState> = ({ employeeForm}) => {
+  return { ...employeeForm };
+};
+
+export default connect<StateProps, {}, EmployeeCreateScreenProps, RootState>(mapStateToPros)(EmployeeCreateScreen);

@@ -37,12 +37,10 @@ const EmployeeScreen: React.FC<Props> = ({ navigation, getEmployees, employees }
       <FlatList
         data={employees}
         keyExtractor={item => item.name}
-        renderItem={({ item: { name, phone, shift } }) => (
+        renderItem={({ item: { name } }) => (
           <ListItem>
             <ListItem.Content>
               <ListItem.Title>{name}</ListItem.Title>
-              <ListItem.Subtitle>{phone}</ListItem.Subtitle>
-              <ListItem.Subtitle>{shift}</ListItem.Subtitle>
             </ListItem.Content>
           </ListItem>
         )}
